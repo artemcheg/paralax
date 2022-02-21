@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:scroll/main.dart';
@@ -22,7 +21,6 @@ class _ScrollState extends State<Scroll> {
     'assets/8.jpg',
   ];
   ScrollController controller = ScrollController();
-  GlobalKey globalKey = GlobalKey();
 
   @override
   void initState() {
@@ -36,23 +34,20 @@ class _ScrollState extends State<Scroll> {
       child: Transform.rotate(
         angle: 0.1,
         child: SingleChildScrollView(
-          key: globalKey,
-          padding: const EdgeInsets.only(left: 700, right: 200),
+          padding: const EdgeInsets.only(left: 700, right: 700),
           clipBehavior: Clip.none,
           controller: controller,
           scrollDirection: Axis.horizontal,
           child: Stack(
             children: [
-              Align(
-                  alignment: Alignment.center,
-                  child: Blur(item: item)),
+              Blur(item: item),
               Align(
                   alignment: Alignment.center,
                   child:
                       Row(
                         children: [
                           // Text("Text",style: TextStyle(fontSize: 50),),
-                          Row(children: item.map((e) => Item(asset: e,parentKey: globalKey,controller: controller,)).toList()),
+                          Row(children: item.map((e) => Item(asset: e)).toList()),
                         ],
                       )),
             ],
@@ -65,10 +60,7 @@ class _ScrollState extends State<Scroll> {
 
 class Item extends StatelessWidget {
   final String asset;
-  final ScrollController controller;
-  final GlobalKey parentKey;
-
-  Item({Key? key, required this.asset, required this.controller, required this.parentKey}) : super(key: key);
+  Item({Key? key, required this.asset}) : super(key: key);
 
   final GlobalKey globalKeyImage = GlobalKey();
 
@@ -132,20 +124,22 @@ class _BlurState extends State<Blur> {
       child: Row(
           children: widget.item
               .map((e) => Stack(
+            alignment: Alignment.bottomCenter,
                     children: [
                       SizedBox(
-                          width: 600,
-                          height: 1000,
+                          width: 520,
+                          height: 980,
                           child: Image.asset(
                             e,
                             fit: BoxFit.cover,
                           )),
                       BackdropFilter(
                         filter: ImageFilter.blur(
-                          sigmaX: 50,
-                          sigmaY: 50,
+                          sigmaX: 80,
+                          sigmaY: 20,
                         ),
                         child: Container(
+                          clipBehavior: Clip.none,
                           color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                       )
