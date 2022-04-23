@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scroll/main.dart';
@@ -22,17 +23,24 @@ class _Scroll2State extends State<Scroll2> {
     'assets/6.jpg',
     'assets/7.jpg',
     'assets/8.jpg',
+    'assets/9.jpg',
+    'assets/10.jpg',
+    'assets/11.jpg',
+    'assets/12.jpg',
+    'assets/13jpg',
+    'assets/14.jpg',
+    'assets/15.jpg',
+    'assets/16.jpg',
+    'assets/17.jpg',
+    'assets/18.jpg',
+    'assets/19.jpg',
+    'assets/20.jpg',
   ];
   late LinkedScrollControllerGroup _controllers;
   late ScrollController controller;
   late ScrollController controller2;
   final String neon =
-      'Неон – это элемент таблицы Менделеева, инертный газ без цвета и запаха, '
-      'активно применяемый для уличного освещения (вывески и реклама). '
-      'На самом деле, неоновый свет имеет красный оттенок, '
-      'а для получения всех прочих цветов в освещении используют ртуть и фосфор '
-      'в определенных пропорциях. Выражение "неоновые цвета" с этой точки зрения неверно, '
-      'правильнее было бы говорить "флуоресцентные цвета", когда говорят о кричащих, "кислотных" оттенках.';
+      'Лес — составная часть природы, понятие «лес» можно рассматривать на разных уровнях. В глобальном масштабе — это часть биосферы, в локальном — это может быть насаждение. Лес также можно рассматривать как природно-зональное подразделение, как провинциальное подразделение, как лесной массив (Шипов лес, Шатилов лес, Чёрный лес), как экосистему. Леса занимают около трети площади суши, площадь леса на Земле составляет 38 млн км². Из них 264 млн га, или 7 %, посажены человеком, к началу XXI века человек уничтожил около 50 % площадей лесов, ранее существовавших на планете. Половина лесной зоны принадлежит тропическим лесам. Площади, занятые деревьями с сомкнутостью крон менее 0,2—0,3, считаются редколесьем.';
 
   @override
   void initState() {
@@ -51,11 +59,12 @@ class _Scroll2State extends State<Scroll2> {
 
   late Gradient gradient = const LinearGradient(
       transform: GradientRotation(0.45),
-      colors: [Color(0xffD3006E), Color(0xffff6347), Color(0xff861098)]);
+      colors: [Color(0xff5eef77), Color(0xff3ba25e), Color(0xff6adaab)]);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         MainScroll2(
           controller: controller2,
@@ -87,29 +96,30 @@ class TextInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 50),
+      padding: const EdgeInsets.only(left: 70),
       child: Align(
           alignment: Alignment.centerLeft,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               RepaintBoundary(
                 child: ScrollAnimation(
-                  reverseDuration: const Duration(seconds: 2),
+                  reverseDuration: const Duration(seconds: 1),
                   controller: controller,
                   child: ShaderMask(
                     blendMode: BlendMode.srcIn,
                     shaderCallback: (Rect bounds) => gradient.createShader(
-                        Rect.fromLTWH(1, 10, bounds.width * 2, bounds.height)),
+                        Rect.fromLTWH(1, 10, bounds.width * 6, bounds.height)),
                     child: const Text(
-                      'NEON',
+                      'ЛЕС',
                       style: TextStyle(
                           fontSize: 70,
                           fontWeight: FontWeight.w900,
                           shadows: [
-                            Shadow(color: Color(0xffD3006E), blurRadius: 15),
-                            Shadow(color: Color(0xffff6347), blurRadius: 8),
-                            Shadow(color: Color(0xff861098), blurRadius: 2)
+                            Shadow(color: Color(0xff53f320), blurRadius: 10),
+                            Shadow(color: Color(0xff93c21d), blurRadius: 8),
+                            Shadow(color: Color(0xff329d79), blurRadius: 2)
                           ],
                           color: Colors.white),
                     ),
@@ -124,7 +134,7 @@ class TextInfo extends StatelessWidget {
                   reverseDuration: const Duration(seconds: 1),
                   durationStart: const Duration(milliseconds: 500),
                   child: SizedBox(
-                    width: 400,
+                    width: 600,
                     child: Text(
                       neon,
                       style: TextStyle(
@@ -159,21 +169,36 @@ class MainScroll extends StatelessWidget {
       behavior: MyCustomScrollBehavior().copyWith(scrollbars: false),
       child: Transform.rotate(
         angle: 0.1,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 450, right: 700),
-          clipBehavior: Clip.none,
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          child: RepaintBoundary(
-            child: Align(
-                alignment: Alignment.center,
-                child: Row(
-                    children: item
-                        .map((e) => Item(
-                              asset: e,
-                            ))
-                        .toList())),
-          ),
+        //подключаем скролл мышкой колесиком
+        child: Listener(
+          onPointerSignal: (e) {
+            List<double> list = [];
+            if (e is PointerScrollEvent) {
+              list.add(e.scrollDelta.dy);
+              for (var element in list) {
+                controller.animateTo(controller.offset + (element*2),
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.linear);
+              }
+            }
+          },
+          child: ListView(
+              padding: const EdgeInsets.only(left: 650, right: 700),
+              clipBehavior: Clip.none,
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              children: [
+                RepaintBoundary(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                          children: item
+                              .map((e) => Item(
+                                    asset: e,
+                                  ))
+                              .toList())),
+                ),
+              ]),
         ),
       ),
     );
@@ -196,15 +221,17 @@ class MainScroll2 extends StatelessWidget {
       behavior: MyCustomScrollBehavior().copyWith(scrollbars: false),
       child: Transform.rotate(
         angle: -0.1,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 200),
-          clipBehavior: Clip.none,
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          child: Align(
-              alignment: Alignment.center,
-              child: Row(children: item.map((e) => Blur(item: e)).toList())),
-        ),
+        child: ListView(
+            padding: const EdgeInsets.only(left: 200),
+            clipBehavior: Clip.none,
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            children: [
+              Align(
+                  alignment: Alignment.center,
+                  child:
+                      Row(children: item.map((e) => Blur(item: e)).toList())),
+            ]),
       ),
     );
   }
@@ -215,9 +242,6 @@ class Item extends StatefulWidget {
 
   const Item({Key? key, required this.asset}) : super(key: key);
 
-
-
-
   @override
   _ItemState createState() => _ItemState();
 }
@@ -225,6 +249,7 @@ class Item extends StatefulWidget {
 class _ItemState extends State<Item> {
   final GlobalKey globalKeyImage = GlobalKey();
   bool open = false;
+
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
@@ -236,7 +261,7 @@ class _ItemState extends State<Item> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: const Color.fromRGBO(255, 0, 0, 0)),
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.5),
@@ -247,10 +272,10 @@ class _ItemState extends State<Item> {
                 ],
               ),
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: SizedBox(
                   height: 700,
-                  width: 400,
+                  width: 550,
                   child: Flow(
                     delegate: ParalaxDelegate(
                         scrollableState: Scrollable.of(context)!,
@@ -259,9 +284,7 @@ class _ItemState extends State<Item> {
                     children: [
                       Image.asset(
                         widget.asset,
-                        isAntiAlias: true,
                         key: globalKeyImage,
-                        fit: BoxFit.cover,
                       ),
                     ],
                   ),
@@ -290,23 +313,24 @@ class _BlurState extends State<Blur> {
     return RepaintBoundary(
       child: Stack(
         children: [
-          SizedBox(
-              width: 500,
-              height: 980,
-              child: Image.asset(
-                widget.item,
-                fit: BoxFit.cover,
-              )),
+          Opacity(
+            opacity: 0.6,
+            child: ColorFiltered(
+                colorFilter: const ColorFilter.linearToSrgbGamma(),
+                child: Image.asset(
+                  widget.item,
+                  scale: 0.4,
+                  // height: 5000,
+                  // fit: BoxFit.fitHeight,
+                )),
+          ),
           BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 30,
-              sigmaY: 20,
-            ),
+            filter: ImageFilter.blur(sigmaX: 100, sigmaY: 50),
             child: Container(
-              clipBehavior: Clip.none,
-              color: const Color.fromARGB(255, 0, 0, 0),
+              // clipBehavior: Clip.none,
+              color: Colors.black,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -326,7 +350,9 @@ class ParalaxDelegate extends FlowDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
-    return const BoxConstraints.tightFor(height: 700);
+    return BoxConstraints.tightFor(
+      height: 700,
+    );
   }
 
   @override
@@ -340,7 +366,7 @@ class ParalaxDelegate extends FlowDelegate {
         ancestor: scrollableBox);
     final viewportDimension = scrollableState.position.viewportDimension;
     final scrollFraction =
-        (listItemOffset.dx / viewportDimension).clamp(0.0, 1.0);
+        (listItemOffset.dx / viewportDimension).clamp(-0.5, 1.0);
     final horizontalAlignment = Alignment(scrollFraction * 2 - 1, 0.0);
 
     final backgroundSize =
@@ -352,7 +378,7 @@ class ParalaxDelegate extends FlowDelegate {
     context.paintChild(
       0,
       transform: Transform.translate(
-        offset: Offset(childRect.left, -1),
+        offset: Offset(childRect.left, 0),
       ).transform,
     );
   }

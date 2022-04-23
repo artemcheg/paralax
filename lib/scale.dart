@@ -42,7 +42,7 @@ class _ScrollAnimationState extends State<ScrollAnimation>
         Tween<Offset>(begin: Offset(0, widget.offset), end: const Offset(0, 0))
             .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
-    _animationFade = Tween<double>(begin: -1.0, end: 1.0)
+    _animationFade = Tween<double>(begin: 0, end: 1.0)
         .animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     _controller.forward();
